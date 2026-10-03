@@ -4,6 +4,7 @@ import newsView from "./views/newsView.js"
 import aboutView from "./views/aboutView.js"
 import createAsteroidSection from "./views/spaceView/Modules/asteroidModule.js"
 import signIn from "./views/authView.js"
+import { spawnNewsArticle } from "./views/newsView.js" //NF
 
 const routes = {
     "/": homeView,
@@ -11,7 +12,8 @@ const routes = {
     "/news": newsView,
     "/about": aboutView,
     "/auth": signIn,
-    "/space/asteroids": createAsteroidSection
+    "/space/asteroids": createAsteroidSection,
+    "/news/article": spawnNewsArticle //NF
 };
 
 const appContainer = document.getElementById("app")
