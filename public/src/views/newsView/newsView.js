@@ -1,8 +1,7 @@
-import {createEl} from "./tools.js"
-import { getAPOD } from "../NasaApi.js"
+import { createEl } from "../tools.js"
+import { getAPOD } from "../../NasaApi.js"
 
-let arr = []
-let articleID = ""
+let arr = [] //local storage ????????????????
 
 export default function newsView(){
     const app = document.querySelector('#app')
@@ -17,6 +16,9 @@ export default function newsView(){
 
     getAPOD("").then(data => {
         arr = structuredClone(data)
+
+        const arrJSON = JSON.stringify(arr)
+        localStorage.setItem("newsArticles", arrJSON)
         
         spawnNewsCards(arr, cardsContainer)
         cardsContainer.before(spawnSortMenu(cardsContainer))
@@ -27,46 +29,12 @@ export default function newsView(){
     return section
 }
 
-
-
-
-function createNewsArticle(imgURL, title, description){//a
-    const section = createEl("section", "", "article")
-
-    const returnLink = createEl("a", "Return to News", "link")
-    returnLink.href = "/news"
-    returnLink.setAttribute("data-link", "")
-    section.append(returnLink)
-
-    const img = createEl("img", "", "newsArticleImg")
-    img.src = imgURL
-    section.append(img)
-
-    const textBlock = createEl("div", "", "articleNewsText")
-    textBlock.append(createEl("h2", title, "text"))
-    textBlock.append(createEl("p", description, "text"))
-    section.append(textBlock)
-
-    return section
-}
-export function spawnNewsArticle(){//a
-    const article = getArticleById(articleID)
-    return createNewsArticle(article.hdurl, article.title, getDescription(article))
-}
-
-function getArticleById(id){//a
-    for (const el of arr) {
-        if(el.post_id === id){
-            return el
-        }
-    }
-}
-
-export function getDescription(el){//!
+export function getDescription(el){
     const tempBlock = createEl("div", "", "block")
     tempBlock.innerHTML = el.explanation
     return tempBlock.textContent
 }
+
 
 function createNewsCard(imgURL, title, description, id){
     const container = createEl("div", "", "newsPreviewCard")
@@ -88,7 +56,7 @@ function createNewsCard(imgURL, title, description, id){
     container.prepend(img)
 
     container.addEventListener("click", () => {
-        articleID = id
+        localStorage.setItem("articleID", id)
     })
 
     return container

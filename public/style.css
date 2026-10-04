@@ -289,7 +289,6 @@ blue-10: #2E3A92 */
     gap: 30px;
     padding: 15px;
     border: 3px solid #2E3A92;
-    cursor: pointer;
     transition: border 0.3s, border-bottom 0.3s;
 }
 .newsPreviewCard:hover{
@@ -304,13 +303,18 @@ blue-10: #2E3A92 */
 }
 .previewNewsText{
     color: #ced0d3;
-    width: 70%;
-    height: 90%;
+    width: 80%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 10px;
     justify-content: flex-start;
     align-items: center;
+}
+.previewNewsText .link{
+    font-size: 2rem;
+    position: relative;
+    bottom: 0;
 }
 .newsPreviewCardsContainer{
     width: 100%;
@@ -354,15 +358,23 @@ blue-10: #2E3A92 */
     display: flex;
     flex-direction: column;
     gap: 30px;
-    padding: 40px;
+    padding: 0px 40px;
     align-items: center;
     justify-content: center;
     background-color: #0d1117;
     border: 3px solid #2E3A92;
+    border-top: none;
+}
+.article .link{
+    font-size: 2rem;
+    position: relative;
+    left: 0;
+    top: 0;
+    align-self: center;
 }
 .newsArticleImg{
     width: 90%;
-    height: 20%;
+    height: 800px;
 }
 .articleNewsText > h2{
     font-size: 4rem;

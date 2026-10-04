@@ -1,10 +1,10 @@
 import homeView from "./views/homeView/homeView.js"
 import spaceView from "./views/spaceView/spaceView.js"
-import newsView from "./views/newsView.js"
+import newsView from "./views/newsView/newsView.js"
 import aboutView from "./views/aboutView.js"
 import createAsteroidSection from "./views/spaceView/Modules/asteroidModule.js"
 import signIn from "./views/authView.js"
-import { spawnNewsArticle } from "./views/newsView.js" //NF
+import spawnNewsArticle from "./views/newsView/Modules/articleModule.js"
 
 const routes = {
     "/": homeView,
@@ -13,7 +13,7 @@ const routes = {
     "/about": aboutView,
     "/auth": signIn,
     "/space/asteroids": createAsteroidSection,
-    "/news/article": spawnNewsArticle //NF
+    "/news/article": spawnNewsArticle
 };
 
 const appContainer = document.getElementById("app")
