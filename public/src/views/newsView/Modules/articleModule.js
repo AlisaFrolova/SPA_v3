@@ -1,8 +1,9 @@
 import { createEl } from "../../tools.js"
-import { getDescription } from "../newsView.js"
+import getDescription from "../Components/getDescription.js"
+import { getValueFromLocalStorage } from "../../tools.js"
 
 export default function spawnNewsArticle(){
-    const article = getArticleById(parseInt(localStorage.getItem("articleID"))) //local storage - ?
+    const article = getArticleById(parseInt(localStorage.getItem("articleID"))) 
     return createNewsArticle(article.hdurl, article.title, getDescription(article))
 }
 
@@ -29,10 +30,7 @@ function createNewsArticle(imgURL, title, description){
 }
 
 function getArticleById(id){
-    const getArr = localStorage.getItem("newsArticles")//local storage - ?
-    const arrData = JSON.parse(getArr)
-
-    for (const el of arrData) {
+    for (const el of getValueFromLocalStorage("newsArticles")) {
         if(el.post_id === id){
             return el
         }

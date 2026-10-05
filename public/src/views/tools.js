@@ -49,3 +49,8 @@ export function getPreviousDay(){
 export function getRandomNumber(min, max) {//may be equal to MIN, but always less than MAX
   return Math.floor(Math.random() * (max - min) + min)
 }
+
+export function getValueFromLocalStorage(key){
+    const getArr = localStorage.getItem(key)
+    return JSON.parse(getArr)
+}
