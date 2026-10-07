@@ -24,6 +24,11 @@ app.get("/api/users", (req, res) => {
   res.json(users);
 });
 
+
+app.get("/api/auth", (req, res) => {
+  res.json({auth: true});
+});
+
 /* 2. POST - Добавить нового пользователя */
 app.post("/api/users", (req, res) => {
   const { name, age, year, profession } = req.body;

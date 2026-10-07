@@ -1,6 +1,6 @@
 import {createEl} from "./tools.js"
 
-const credentials = { username: 'johnd', password: 'm38rmF$' };
+//const credentials = { username: 'johnd', password: 'm38rmF$' };
 
 export default function signIn(){ //NF
     if(localStorage.getItem("token") === null){
@@ -9,55 +9,46 @@ export default function signIn(){ //NF
 }
 function spawnForm(){
     //form
-    const form = document.createElement("div")
+    const form = createEl("div", "", "form")
 
-    //login
-    const loginContainer = document.createElement("div")
-    form.append(loginContainer)
-
-    const loginInput = document.createElement("input")
-    loginInput.type = "text"
-    loginInput.name = "login"
-    loginInput.placeholder = "login"
-    loginInput.id = "loginId"
-    loginContainer.append(loginInput)
-
-    const labelLogin = createEl("label", "Login", "textWhite")
-    labelLogin.for = "loginId"
-    loginContainer.append(labelLogin)
-
-    //password
-    const passwordContainer = document.createElement("div")
-    form.append(passwordContainer)
-
-    const passwordInput = document.createElement("input")
-    passwordInput.type = "text"
-    passwordInput.name = "password"
-    passwordInput.placeholder = "password"
-    passwordInput.id = "passwordId"
-    passwordContainer.append(passwordInput)
-
-    const labelPassword = createEl("label", "Password", "textWhite")
-    labelPassword.for = "passwordId"
-    passwordContainer.append(labelPassword)
+    form.append(createInputBlock("Login"))
+    form.append(createInputBlock("Password"))
 
     //button
-    const submitButton = createEl("button", "Submit", "submitButton")
+    const submitButton = createEl("button", "Submit", "confirmButton")
     form.append(submitButton)
 
     submitButton.addEventListener('click', () => {
+        // body: JSON.stringify(credentials)
+        //if(loginInput.value === credentials.username && passwordInput.value === credentials.password){}
+        //https://fakestoreapi.com/auth/login 
+
+        fetch('/api/auth', {   
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+        }).then(response => response.json()).then(data => {
+            console.log(data)
+        })
         
-        if(loginInput.value === credentials.username && passwordInput.value === credentials.password){
-            fetch('https://fakestoreapi.com/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(credentials)
-            }).then(response => response.json()).then(data => localStorage.setItem("token", data.token)).then(() => {window.location.replace("/SPA_v2/")}) //+
-        }
         event.preventDefault()
-        console.log(loginInput.value)
-        console.log(passwordInput.value)
+       /*  window.location.replace("/") *///+
     })
 
     return form
+}
+
+function createInputBlock(type){
+    const container = createEl("div", "", "inputContainer")
+
+    const input = createEl("input", "", type)
+    input.type = "text"
+    input.placeholder = type
+    input.id = `${type}Id`
+    container.append(input)
+
+    const login = createEl("label", type, "textWhite")
+    login.for = `${type}Id`
+    container.append(login)
+
+    return container
 }

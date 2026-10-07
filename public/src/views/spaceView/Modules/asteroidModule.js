@@ -12,8 +12,12 @@ export default function createAsteroidSection(){
     const asteroidContainer = createEl("div", "", "asteroidContainer")
     asteroidContainer.style.backgroundImage = `url(https://images-assets.nasa.gov/image/iss074e0472536/iss074e0472536~orig.jpg)`
 
-    let tempArr = []
+    const loadingText = createEl("p", "Loading asteroids...", "loadingText")
+    asteroidSection.append(loadingText)
 
+    asteroidSection.append(asteroidContainer)
+
+    let tempArr = []
     getAsteroids(getPreviousDay(), getCurrentDay()).then(asteroids => {
         for (const key in asteroids.near_earth_objects) {
             tempArr = tempArr.concat(asteroids.near_earth_objects[key])
@@ -23,11 +27,10 @@ export default function createAsteroidSection(){
         const arrJSON = JSON.stringify(res)
         localStorage.setItem("asteroidsArr", arrJSON)
 
+        loadingText.remove()
         asteroidSection.firstElementChild.after(createSortMenu())
         spawnCards(res)
     })
-
-    asteroidSection.append(asteroidContainer)
 
     return asteroidSection
 }

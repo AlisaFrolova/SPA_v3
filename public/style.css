@@ -137,6 +137,7 @@ blue-10: #2E3A92 */
     justify-content: center;
     width: 100%;
     min-height: 400px;
+    background: #0d1117;
 }
 .asteroidSection > h2{
     background-image: url("https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000720/GSFC_20171208_Archive_e000720~orig.jpg");
@@ -267,6 +268,9 @@ blue-10: #2E3A92 */
 .confirmButton:hover{
     color: #2E3A92;
 }
+.loadingText{
+    font-size: 2.5rem;
+}
 
 /* news */
 .newsSection{
@@ -317,6 +321,8 @@ blue-10: #2E3A92 */
     bottom: 0;
 }
 .newsPreviewCardsContainer{
+    min-height: 100px;
+    background: #0d1117;
     width: 100%;
     height: auto;
     display: flex;
@@ -412,7 +418,18 @@ blue-10: #2E3A92 */
 }
 
 /* Auth */
-.submitButton{
-    width: 6vw;
-    height: 5vw;
+.form{
+    color: #ced0d3;
+    background: #0d1117;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+.inputContainer{
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    font-size: 1.8rem;
 }

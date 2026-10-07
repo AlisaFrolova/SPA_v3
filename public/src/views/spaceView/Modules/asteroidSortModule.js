@@ -42,7 +42,7 @@ export default function createSortMenu(){
 const filterByRange = (arr) => arr.filter(obj => { return obj.estimated_diameter.meters.estimated_diameter_min >= parseInt(document.querySelector("#Diameter").value) &&
         obj.close_approach_data[0].miss_distance.lunar >= parseInt(document.querySelector("#LD").value)}) //2
 
-function findMinAndMax(type){ //2
+function findMinAndMax(type){ 
     const newArr = []
     for (const el of tempArr) {
         let temp
@@ -75,6 +75,7 @@ function createSortBlock(inputType, inputName){
     
     if(inputType === "range"){
         const minAndMax = findMinAndMax(inputName)
+        tempInput.value = minAndMax[0]
         tempInput.min = minAndMax[0]
         tempInput.max = minAndMax[1]
 
@@ -88,7 +89,7 @@ function createSortBlock(inputType, inputName){
     return sortBlock
 }
 
-function createSortContainer(type){ //2
+function createSortContainer(type){ 
     const sortContainer = createEl("div", "", "sortContainer")
 
     const sortByIncrease = createSortBlock("radio", `Sort By Increasing ${type}`)
@@ -110,7 +111,7 @@ function createSortContainer(type){ //2
     return sortContainer
 }
 
-const sortByIncreasing = (tempArr, type) => { //2
+const sortByIncreasing = (tempArr, type) => {
     if(type === "Distance"){
         return tempArr.sort((a, b) => a.close_approach_data[0].miss_distance.lunar - b.close_approach_data[0].miss_distance.lunar)
     }else{
