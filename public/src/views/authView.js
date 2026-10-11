@@ -1,10 +1,11 @@
 import {createEl} from "./tools.js"
 
-//const credentials = { username: 'johnd', password: 'm38rmF$' };
-
 export default function signIn(){ //NF
     if(localStorage.getItem("token") === null){
         return spawnForm()
+    }else{
+        window.location.replace("/")
+        // document.getElementById("authLink").remove()
     }
 }
 function spawnForm(){
@@ -19,19 +20,48 @@ function spawnForm(){
     form.append(submitButton)
 
     submitButton.addEventListener('click', () => {
-        // body: JSON.stringify(credentials)
-        //if(loginInput.value === credentials.username && passwordInput.value === credentials.password){}
-        //https://fakestoreapi.com/auth/login 
+        const login = document.getElementById("LoginId").value
+        const password = document.getElementById("PasswordId").value
 
-        fetch('/api/auth', {   
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-        }).then(response => response.json()).then(data => {
-            console.log(data)
-        })
+        const userData = {
+            username: login,
+            password: password
+        }
+
+        if(login !== "" && password !== ""){
+            fetch('/api/auth', {   
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+            }).then(response => response.json()).then(() => {
+                const credentials = { username: 'johnd', password: 'm38rmF$' }
+                fetch('https://fakestoreapi.com/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(credentials)
+                })
+                .then(res => res.json())
+                .then(token => localStorage.setItem("token", token.token)).then(() => {
+                    window.location.replace("/")
+                    // document.getElementById("authLink").remove()
+                })
+            })
+        }else{
+            //add some hints for user here
+        }
+        
+
+        // fetch('/api/auth', {   
+        // method: 'GET',
+        // headers: { 'Content-Type': 'application/json' }
+        // }).then(response => response.json()).then(data => {
+        //     console.log(data.auth)
+        //     if(data.auth){
+        //         //window.location.replace("/")
+        //     }
+        // })
         
         event.preventDefault()
-       /*  window.location.replace("/") *///+
     })
 
     return form
@@ -46,9 +76,9 @@ function createInputBlock(type){
     input.id = `${type}Id`
     container.append(input)
 
-    const login = createEl("label", type, "textWhite")
-    login.for = `${type}Id`
-    container.append(login)
+    const label = createEl("label", type, "textWhite")
+    label.for = `${type}Id`
+    container.append(label)
 
     return container
 }

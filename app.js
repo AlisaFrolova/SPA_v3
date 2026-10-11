@@ -29,6 +29,23 @@ app.get("/api/auth", (req, res) => {
   res.json({auth: true});
 });
 
+app.post("/api/auth", (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ error: "-" });
+  }
+
+  const newUser = {
+    id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1,
+    username,
+    password
+  };
+
+  users.push(newUser);
+  res.status(201).json({ message: "user was succesfully added", user: newUser });
+});
+
 /* 2. POST - Добавить нового пользователя */
 app.post("/api/users", (req, res) => {
   const { name, age, year, profession } = req.body;
