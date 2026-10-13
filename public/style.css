@@ -433,3 +433,11 @@ blue-10: #2E3A92 */
     gap: 20px;
     font-size: 1.8rem;
 }
+.messageContainer{
+    width: 40%;
+    padding: 10px;
+    font-size: 2rem;
+    border: 3px solid #2E3A92;
+    background: #3c4bb9;
+    text-align: center;
+}

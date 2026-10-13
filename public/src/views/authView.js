@@ -4,7 +4,7 @@ export default function signIn(){ //NF
     if(localStorage.getItem("token") === null){
         return spawnForm()
     }else{
-        window.location.replace("/")
+        window.location.replace("/")//-
         // document.getElementById("authLink").remove()
     }
 }
@@ -28,28 +28,47 @@ function spawnForm(){
             password: password
         }
 
-        if(login !== "" && password !== ""){
-            fetch('/api/auth', {   
+            fetch('/api/register', {   //nf 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userData)
             }).then(response => response.json()).then(() => {
-                const credentials = { username: 'johnd', password: 'm38rmF$' }
-                fetch('https://fakestoreapi.com/auth/login', {
+                fetch('/api/login', {   
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(credentials)
-                })
-                .then(res => res.json())
-                .then(token => localStorage.setItem("token", token.token)).then(() => {
-                    window.location.replace("/")
-                    // document.getElementById("authLink").remove()
+                body: JSON.stringify(userData)
+                }).then(response => response.json()).then(data => {
+                    fetch('/api/profile', {   
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json', "authorization": `Bearer ${data.token}` }
+                    }).then(response => response.json()).then(message => console.log(message))
                 })
             })
-        }else{
-            //add some hints for user here
+
+
+
+
+
+// .then(() => {
+//                 fetch('api/profile', {   
+//                 method: 'GET',
+//                 headers: { 'Content-Type': 'application/json', "authorization": `Bearer ${token}` }
+//                 }).then(response => response.json()).then(data => {
+//                     console.log(data)
+//                 })
+//             })
+
+
+
+                // .then(res => res.json())
+                // .then(token => localStorage.setItem("token", token.token)).then(() => {
+                // })
+       /*  }else{
+            const messageContainer = createEl("div", "", "messageContainer")
+            messageContainer.append(createEl("p", "Enter all values!", "messageText"))
+            form.append(messageContainer)
         }
-        
+         */
 
         // fetch('/api/auth', {   
         // method: 'GET',

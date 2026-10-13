@@ -1,9 +1,12 @@
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const { createUser, findUser } = require('./users');
 
-// Импортируем массив пользователей из отдельного файла
-const users = require("./users");
+const JWT_SECRET = 'mySecretWord'
+const JWT_EXPIRES = 60*60*24
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,92 +20,72 @@ app.use((req, res, next) => {
   next();
 });
 
-/* === CRUD ОПЕРАЦИИ === */
-
-/* 1. GET - Получить всех пользователей */
-app.get("/api/users", (req, res) => {
-  res.json(users);
+/* Запуск сервера */
+app.listen(PORT, () => {
+  console.log(`🚀 Сервер запущен на http://localhost:${PORT}`);
 });
-
 
 app.get("/api/auth", (req, res) => {
   res.json({auth: true});
 });
 
-app.post("/api/auth", (req, res) => {
-  const { username, password } = req.body;
+// app.post("/api/auth", (req, res) => {
+//   const { username, password } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).json({ error: "-" });
-  }
+//   if (!username || !password) {
+//     return res.status(400).json({ error: "-" });
+//   }
 
-  const newUser = {
-    id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1,
-    username,
-    password
-  };
+//   const newUser = {
+//     id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1,
+//     username,
+//     password
+//   };
 
-  users.push(newUser);
-  res.status(201).json({ message: "user was succesfully added", user: newUser });
-});
+//   users.push(newUser);
+//   res.status(201).json({ message: "user was succesfully added", user: newUser });
+// });
 
-/* 2. POST - Добавить нового пользователя */
-app.post("/api/users", (req, res) => {
-  const { name, age, year, profession } = req.body;
+//r
+app.post('/api/register', async (req, res) => {
+  const { username, password } = req.body
+  if (await findUser(username))
+    return res.status(400).json({ message: "User already exists" })
+ 
+  await createUser(username, password)
+  res.json({ message: "User registered" })
+})
 
-  if (!name || !age || !profession) {
-    return res.status(400).json({ error: "Заполните обязательные поля: name, age, profession" });
-  }
+//l
+app.post('/api/login', async (req, res) => {
+  const { username, password } = req.body
+  const user = await findUser(username)
+  if (!user) return res.status(401).json({ message: 'Invalid credentials' })
+ 
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) return res.status(401).json({ message: 'Invalid credentials' })
+ 
+  const token = jwt.sign(
+    { username },
+    JWT_SECRET,
+    { expiresIn: JWT_EXPIRES }
+  )
+ 
+  res.json({ token })
+})
 
-  const newUser = {
-    id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1,
-    name,
-    age: parseInt(age),
-    year: parseInt(year) || new Date().getFullYear() - parseInt(age),
-    profession
-  };
-
-  users.push(newUser);
-  res.status(201).json({ message: "Пользователь успешно добавлен", user: newUser });
-});
-
-/* 3. PUT - Изменить пользователя по ID */
-app.put("/api/users/:id", (req, res) => {
-  const userId = parseInt(req.params.id);
-  const { name, age, year, profession } = req.body;
-  
-  const userIndex = users.findIndex(u => u.id === userId);
-
-  if (userIndex !== -1) {
-    /* Если новое значение передано в req.body, берем его. Иначе оставляем старое. */
-    users[userIndex] = {
-      ...users[userIndex],
-      name: name || users[userIndex].name,
-      age: age ? parseInt(age) : users[userIndex].age,
-      year: year ? parseInt(year) : users[userIndex].year,
-      profession: profession || users[userIndex].profession
-    };
-    
-    res.json({ message: "Данные пользователя успешно обновлены", user: users[userIndex] });
-  } else {
-    res.status(404).json({ error: "Пользователь с таким ID не найден" });
-  }
-});
-
-/* 4. DELETE - Удалить пользователя по ID */
-app.delete("/api/users/:id", (req, res) => {
-  const userId = parseInt(req.params.id);
-  const userIndex = users.findIndex(u => u.id === userId);
-
-  if (userIndex !== -1) {
-    const deletedUser = users.splice(userIndex, 1);
-    res.json({ message: `Пользователь ${deletedUser[0].name} успешно удален` });
-  } else {
-    res.status(404).json({ error: "Пользователь с таким ID не найден" });
-  }
-});
-
-/* Запуск сервера */
-app.listen(PORT, () => {
-  console.log(`🚀 Сервер запущен на http://localhost:${PORT}`);
-});
+//p
+app.get('/api/profile', authMiddleware, (req, res) => {
+  res.json({ message: `Hello, ${req.user.username}!` })
+})
+function authMiddleware(req, res, next) { 
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+  if (!token) return res.sendStatus(401)
+ 
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403)
+    req.user = user
+    next()
+  })
+}

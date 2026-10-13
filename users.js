@@ -1,7 +1,14 @@
-let users = [
-  { id: 1, name: "Иван", age: 25, year: 2001, profession: "Frontend Developer" },
-  { id: 2, name: "Мария", age: 30, year: 1996, profession: "UI/UX Designer" },
-  { id: 3, name: "Алексей", age: 28, year: 1998, profession: "Backend Node.js Developer" }
-];
-
-module.exports = users;
+const bcrypt = require('bcryptjs');
+ 
+const users = []; 
+ 
+async function createUser(username, password) {
+  const hashed = await bcrypt.hash(password, 10);
+  users.push({ username, password: hashed });
+}
+ 
+async function findUser(username) {
+  return users.find(u => u.username === username);
+}
+ 
+module.exports = { createUser, findUser };
