@@ -1,4 +1,5 @@
 import { createEl } from "../../tools.js"
+import tokenData from "../../tokenModule.js"
 import createAchievementsSection from "./Modules/achievementsModule.js"
 
 export default function homeView(){
@@ -10,10 +11,10 @@ export default function homeView(){
 
     section.append(createEl("h1", "Astra Spectrum Analytics", "header"))
 
-    // if(localStorage.getItem("accessToken") !== null){
+    // if(tokenData.getAccessToken() !== null){ //nf
     //     fetch('/api/username', {   
     //     method: 'GET',
-    //     headers: { 'Content-Type': 'application/json', "authorization": `Bearer ${localStorage.getItem("accessToken")}` }
+    //     headers: { 'Content-Type': 'application/json', "authorization": `Bearer ${tokenData.getAccessToken()}` }
     //     }).then(response => {
     //         if(response.status == 200){
     //             response.json().then(data => {
@@ -23,17 +24,14 @@ export default function homeView(){
     //                 setTimeout(() => {messageBlock.remove()}, 3000)
     //             })
     //         }else{
-    //             const response = await fetch('/api/refresh', { 
-    //                 method: 'POST', 
-    //                 credentials: 'include'
-    //             });
-    //             if (response.ok) {
-    //                 const data = await response.json();
-    //                 let currentAccessToken = data.accessToken;
-    //             }
+    //             tokenData.refreshAccessToken()
     //         }
     //     })
     // }
+
+    // tokenData.refreshAccessToken().then(res => {
+    //     if(res) console.log(tokenData.getAccessToken())
+    // })
     
     section.append(createAchievementsSection())
 

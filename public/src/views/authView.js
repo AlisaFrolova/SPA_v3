@@ -1,7 +1,8 @@
+import tokenData from "../tokenModule.js"
 import { createEl } from "../tools.js"
 
 export default function signIn(){
-    if(localStorage.getItem("accessToken") === null){
+    if(tokenData.getAccessToken() === null){
         return spawnForm()
     }else{
         window.location.replace("/")
@@ -62,7 +63,7 @@ function spawnForm(){
         }
             fetch('/api/profile', {   
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json', "authorization": `Bearer ${localStorage.getItem("accessToken")}` }
+                headers: { 'Content-Type': 'application/json', "authorization": `Bearer ${tokenData.getAccessToken()}` }
                 }).then(response => response.json()).then(message => console.log(message))  
 
         event.preventDefault()
@@ -94,7 +95,7 @@ function login(userData){
         body: JSON.stringify(userData)
         }).then(response => {
             if(response.status === 200){
-                response.json().then(data => localStorage.setItem("accessToken", data.accessToken))
+                response.json().then(data => tokenData.setAccessToken(data.accessToken))
                 .then(() => window.location.replace("/"))
             }else{
                 return false
