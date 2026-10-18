@@ -1,90 +1,110 @@
-import {createEl} from "./tools.js"
+import { createEl } from "../tools.js"
 
-export default function signIn(){ //NF
-    if(localStorage.getItem("token") === null){
+export default function signIn(){
+    if(localStorage.getItem("accessToken") === null){
         return spawnForm()
     }else{
-        window.location.replace("/")//-
-        // document.getElementById("authLink").remove()
+        window.location.replace("/")
     }
 }
 function spawnForm(){
     //form
     const form = createEl("div", "", "form")
 
+    const header = createEl("h2", "Register", "authHeader")
+    form.append(header)
+
     form.append(createInputBlock("Login"))
     form.append(createInputBlock("Password"))
 
-    //button
+    //login button
+    let isLogin = false
+    const loginButton = createEl("button", "Switch to Login", "loginButton")
+    loginButton.addEventListener("click", () => {
+        if(!isLogin){
+            isLogin = true
+            loginButton.textContent = "Switch to Register"
+            header.textContent = "Login"
+        }else{
+            isLogin = false
+            loginButton.textContent = "Switch to Login"
+            header.textContent = "Register"
+        }
+    })
+    form.append(loginButton)
+
+    //submit button
     const submitButton = createEl("button", "Submit", "confirmButton")
     form.append(submitButton)
 
-    submitButton.addEventListener('click', () => {
-        const login = document.getElementById("LoginId").value
+    const messageContainer = createEl("div", "", "messageContainer")
+    messageContainer.append(createEl("p", "Invalid enter", "messageText"))
+
+    submitButton.addEventListener("click", () => { 
+        const username = document.getElementById("LoginId").value
         const password = document.getElementById("PasswordId").value
 
         const userData = {
-            username: login,
+            username: username,
             password: password
         }
 
-            fetch('/api/register', {   //nf 
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userData)
-            }).then(response => response.json()).then(() => {
-                fetch('/api/login', {   
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(userData)
-                }).then(response => response.json()).then(data => {
-                    fetch('/api/profile', {   
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json', "authorization": `Bearer ${data.token}` }
-                    }).then(response => response.json()).then(message => console.log(message))
-                })
-            })
-
-
-
-
-
-// .then(() => {
-//                 fetch('api/profile', {   
-//                 method: 'GET',
-//                 headers: { 'Content-Type': 'application/json', "authorization": `Bearer ${token}` }
-//                 }).then(response => response.json()).then(data => {
-//                     console.log(data)
-//                 })
-//             })
-
-
-
-                // .then(res => res.json())
-                // .then(token => localStorage.setItem("token", token.token)).then(() => {
-                // })
-       /*  }else{
-            const messageContainer = createEl("div", "", "messageContainer")
-            messageContainer.append(createEl("p", "Enter all values!", "messageText"))
-            form.append(messageContainer)
+        if(isLogin){
+            if(!login(userData)){
+                form.append(messageContainer)
+                setTimeout(() => {messageContainer.remove()}, 5000)
+            }
+        }else{
+            if(!register(userData)){ 
+                form.append(messageContainer)
+                setTimeout(() => {messageContainer.remove()}, 5000)
+            }
         }
-         */
+            fetch('/api/profile', {   
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json', "authorization": `Bearer ${localStorage.getItem("accessToken")}` }
+                }).then(response => response.json()).then(message => console.log(message))  
 
-        // fetch('/api/auth', {   
-        // method: 'GET',
-        // headers: { 'Content-Type': 'application/json' }
-        // }).then(response => response.json()).then(data => {
-        //     console.log(data.auth)
-        //     if(data.auth){
-        //         //window.location.replace("/")
-        //     }
-        // })
-        
         event.preventDefault()
     })
 
     return form
 }
+
+function register(userData){
+    fetch('/api/register', {   
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+        }).then(response => {
+            if(response.status === 200){
+                response.json().then(() => {
+                    login(userData)
+                    return true
+                })
+            }else{
+                return false
+            }
+        })
+}
+function login(userData){
+    fetch('/api/login', {   
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+        }).then(response => {
+            if(response.status === 200){
+                response.json().then(data => localStorage.setItem("accessToken", data.accessToken))
+                .then(() => window.location.replace("/"))
+            }else{
+                return false
+            }
+        })
+}
+
+
+
+
 
 function createInputBlock(type){
     const container = createEl("div", "", "inputContainer")

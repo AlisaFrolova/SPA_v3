@@ -1,6 +1,6 @@
-import {createEl} from "../tools.js"
+import { createEl } from "../../tools.js"
 import {getAPOD} from "../../NasaApi.js"
-import { getCurrentDay } from "../tools.js"
+import { getCurrentDay } from "../../tools.js"
 
 export default function spaceView(){
     const app = document.querySelector('#app')

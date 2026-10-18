@@ -10,5 +10,9 @@ async function createUser(username, password) {
 async function findUser(username) {
   return users.find(u => u.username === username);
 }
+
+async function getUsers(){
+  return users
+}
  
-module.exports = { createUser, findUser };
+module.exports = { createUser, findUser, getUsers };

@@ -1,4 +1,4 @@
-import {createEl} from "./tools.js"
+import { createEl } from "../tools.js"
 
 const sectionImages = {
     img1: "https://images-assets.nasa.gov/image/iss071e439624/iss071e439624~orig.jpg",

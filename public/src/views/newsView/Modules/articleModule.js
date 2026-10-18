@@ -1,6 +1,6 @@
-import { createEl } from "../../tools.js"
+import { createEl } from "../../../tools.js"
 import getDescription from "../Components/getDescription.js"
-import { getValueFromLocalStorage } from "../../tools.js"
+import { getValueFromLocalStorage } from "../../../tools.js"
 
 export default function spawnNewsArticle(){
     const article = getArticleById(parseInt(localStorage.getItem("articleID"))) 

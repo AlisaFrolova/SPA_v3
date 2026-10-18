@@ -1,5 +1,5 @@
-import { createEl } from "../../tools.js"
-import { getRandomNumber } from "../../tools.js"
+import { createEl } from "../../../tools.js"
+import { getRandomNumber } from "../../../tools.js"
 
 const asteroidImages = {
     img1: "https://images-assets.nasa.gov/image/PIA23876/PIA23876~orig.jpg",

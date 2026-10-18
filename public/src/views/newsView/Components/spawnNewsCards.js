@@ -1,5 +1,5 @@
-import { createEl } from "../../tools.js"
-import { getValueFromLocalStorage } from "../../tools.js"
+import { createEl } from "../../../tools.js"
+import { getValueFromLocalStorage } from "../../../tools.js"
 import getDescription from "./getDescription.js"
 
 export default function spawnNewsCards(container){

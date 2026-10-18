@@ -1,4 +1,4 @@
-import { createEl } from "../../tools.js"
+import { createEl } from "../../../tools.js"
 import { getAPOD } from "../../../NasaApi.js"
 import spawnNewsCards from "../Components/spawnNewsCards.js"
 import spawnSortMenu from "./cardsSortModule.js"

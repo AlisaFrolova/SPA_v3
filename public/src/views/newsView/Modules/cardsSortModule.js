@@ -1,5 +1,5 @@
-import { createEl } from "../../tools.js"
-import { getValueFromLocalStorage } from "../../tools.js"
+import { createEl } from "../../../tools.js"
+import { getValueFromLocalStorage } from "../../../tools.js"
 import spawnNewsCards from "../Components/spawnNewsCards.js"
 
 export default function spawnSortMenu(cardsContainer){

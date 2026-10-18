@@ -9,6 +9,10 @@
 white-30: #E2E8F0
 blue-10: #2E3A92 */
 /* header */
+body{
+    position: relative;
+    z-index: 10;
+}
 .header, .footer{
     width: 100vw;
     height: 10vw;
@@ -51,6 +55,23 @@ blue-10: #2E3A92 */
 
 .footer{
     border-top: 1px solid #E2E8F0;
+}
+
+/* home */
+.messageBlock{
+    position: absolute;
+    z-index: 20;
+    top: 0;
+    left: 40%;
+    width: 22%;
+    height: 14%;
+    background: #ced0d3;
+    border: 3px solid #2E3A92;
+    padding: 20px;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* achievements */
@@ -433,6 +454,11 @@ blue-10: #2E3A92 */
     gap: 20px;
     font-size: 1.8rem;
 }
+.inputContainer input{
+    color: #2E3A92;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
 .messageContainer{
     width: 40%;
     padding: 10px;
@@ -440,4 +466,16 @@ blue-10: #2E3A92 */
     border: 3px solid #2E3A92;
     background: #3c4bb9;
     text-align: center;
+}
+.loginButton{
+    width: 8vw;
+    height: 2.5vw;
+    cursor: pointer;
+    color:#2E3A92;
+    background: #0d1117;
+    border: 3px solid #2E3A92;
+    transition: color 0.3s, border-bottom 0.3s;
+}
+.loginButton:hover{
+    color:#ced0d3;
 }
