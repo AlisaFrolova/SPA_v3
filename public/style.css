@@ -467,7 +467,7 @@ body{
     background: #3c4bb9;
     text-align: center;
 }
-.loginButton{
+.loginButton, .logoutButton{
     width: 8vw;
     height: 2.5vw;
     cursor: pointer;
@@ -476,6 +476,10 @@ body{
     border: 3px solid #2E3A92;
     transition: color 0.3s, border-bottom 0.3s;
 }
-.loginButton:hover{
+.loginButton:hover, .logoutButton:hover{
     color:#ced0d3;
+}
+
+.hideLink{
+    display: none;
 }

@@ -8,22 +8,34 @@ export default tokenData = {
     getAccessToken(){
         return currentAccessToken
     },
-    async refreshAccessToken(){
+    refreshAccessToken(){
+        return fetch("/api/refresh", {
+            method: "POST",
+            credentials: "include"
+        }).then(res => res.json()).then(data => {
+            if(data.accessToken === undefined){
+                return false
+            }else{
+                currentAccessToken = data.accessToken
+                return true
+            }
+        })
+    },
+    async clearTokens(){
         try{
-            const res = await fetch("/api/refresh", {
+            const res = await fetch("/api/clear", {
                 method: "POST",
                 credentials: "include"
             })
 
             if(res.ok){
-                const data = await res.json()
-                currentAccessToken = data.accessToken
+                currentAccessToken = null
                 return true
             }
         }
         catch(err){
-            currentAccessToken = null
             return false
         }
+
     }
 }

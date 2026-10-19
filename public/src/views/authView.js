@@ -2,11 +2,36 @@ import tokenData from "../tokenModule.js"
 import { createEl } from "../tools.js"
 
 export default function signIn(){
-    if(tokenData.getAccessToken() === null){
-        return spawnForm()
-    }else{
-        window.location.replace("/")
-    }
+    const appContainer = document.querySelector("#app")
+    tokenData.refreshAccessToken().then(res =>{
+        console.log(res)
+        if(res){
+            console.log("found token")//tbd
+            spawnLogoutButton()
+        }else{
+            console.log("not found token")//tbd
+            appContainer.append(spawnForm())
+        }
+    })
+    return ""
+}
+
+function spawnLogoutButton(){
+    document.querySelector("#authLink").remove() 
+    const form = document.querySelector(".form")
+    if(form) form.remove()
+
+    const logoutButton = createEl("button", "Log out", "logoutButton")
+    document.querySelector(".header").append(logoutButton)
+    logoutButton.addEventListener("click", () => {
+        tokenData.clearTokens().then(res => {
+            if(res){
+                logoutButton.remove()
+                window.location.replace("/")
+            }
+        })
+    })
+    // window.location.replace("/")
 }
 function spawnForm(){
     //form
@@ -60,12 +85,7 @@ function spawnForm(){
                 form.append(messageContainer)
                 setTimeout(() => {messageContainer.remove()}, 5000)
             }
-        }
-            fetch('/api/profile', {   
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json', "authorization": `Bearer ${tokenData.getAccessToken()}` }
-                }).then(response => response.json()).then(message => console.log(message))  
-
+        } 
         event.preventDefault()
     })
 
@@ -96,15 +116,14 @@ function login(userData){
         }).then(response => {
             if(response.status === 200){
                 response.json().then(data => tokenData.setAccessToken(data.accessToken))
-                .then(() => window.location.replace("/"))
+                .then(() => {
+                    spawnLogoutButton()
+                })
             }else{
                 return false
             }
         })
 }
-
-
-
 
 
 function createInputBlock(type){

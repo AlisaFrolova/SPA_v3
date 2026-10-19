@@ -25,9 +25,8 @@ app.use((req, res, next) => {
   next();
 });
 
-/* Запуск сервера */
 app.listen(PORT, () => {
-  console.log(`🚀 Сервер запущен на http://localhost:${PORT}`);
+  console.log(`Server started on http://localhost:${PORT}`);
 });
 
 
@@ -51,7 +50,7 @@ function isValidValue(value){
 
 
 //login
-app.post('/api/login', async (req, res) => { //done (maybe)
+app.post('/api/login', async (req, res) => { 
   const { username, password } = req.body
   const user = await findUser(username)
   if (!user) return res.status(401).json({ message: 'Invalid credentials' })
@@ -78,16 +77,15 @@ app.post('/api/login', async (req, res) => { //done (maybe)
   return res.json({ accessToken })
 })
 
-
-
-
-//p
-app.get('/api/profile', authMiddleware, (req, res) => {
-  res.json({ message: `Hello, ${req.user.username}!` })
+app.post('/api/clear', (req, res) => {
+    const refreshToken = req.cookies.refreshToken
+    if(!refreshToken) return res.status(401).json({message:"No refresh token"})
+    res.clearCookie("refreshToken")
+    res.end()
 })
 
 
-function authMiddleware(req, res, next) { //done +-
+function authMiddleware(req, res, next) { 
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
   if (!token) return res.sendStatus(401).json({ message: "No access token" })
@@ -99,7 +97,7 @@ function authMiddleware(req, res, next) { //done +-
   })
 }
 
-app.post("/api/refresh", (req,res) => { //maybe done
+app.post("/api/refresh", (req,res) => { 
   const refreshToken = req.cookies.refreshToken
 
   if(!refreshToken) return res.status(401).json({message:"No refresh token"})
