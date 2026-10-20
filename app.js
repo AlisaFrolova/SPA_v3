@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server started on http://localhost:${PORT}`);
+  console.log(`Server launched on http://localhost:${PORT}`);
 });
 
 
@@ -112,6 +112,16 @@ app.post("/api/refresh", (req,res) => {
     )
     return res.json({accessToken: newAccessToken})
   })
+})
+
+app.post("/api/isAuth", (req, res) => {
+   const refreshToken = req.cookies.refreshToken
+    if(!refreshToken) return res.status(401).json({message:"No refresh token"})
+    
+    jwt.verify(refreshToken, REFRESH_SECRET, (err) => {
+    if(err) return res.status(403).json({message:"Invalid refresh token"})
+      else return res.sendStatus(200)
+    })
 })
 
 

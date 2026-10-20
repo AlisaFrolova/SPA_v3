@@ -1,38 +1,22 @@
 import tokenData from "../tokenModule.js"
 import { createEl } from "../tools.js"
+import { spawnLogoutButton } from "../tools.js"
 
 export default function signIn(){
     const appContainer = document.querySelector("#app")
-    tokenData.refreshAccessToken().then(res =>{
-        console.log(res)
+    tokenData.refreshAccessToken().then(res =>{//->
+        console.log(res)//--
         if(res){
-            console.log("found token")//tbd
+            console.log("found token")//--
             spawnLogoutButton()
         }else{
-            console.log("not found token")//tbd
+            console.log("not found token")//--
             appContainer.append(spawnForm())
         }
     })
     return ""
 }
 
-function spawnLogoutButton(){
-    document.querySelector("#authLink").remove() 
-    const form = document.querySelector(".form")
-    if(form) form.remove()
-
-    const logoutButton = createEl("button", "Log out", "logoutButton")
-    document.querySelector(".header").append(logoutButton)
-    logoutButton.addEventListener("click", () => {
-        tokenData.clearTokens().then(res => {
-            if(res){
-                logoutButton.remove()
-                window.location.replace("/")
-            }
-        })
-    })
-    // window.location.replace("/")
-}
 function spawnForm(){
     //form
     const form = createEl("div", "", "form")
@@ -118,6 +102,7 @@ function login(userData){
                 response.json().then(data => tokenData.setAccessToken(data.accessToken))
                 .then(() => {
                     spawnLogoutButton()
+                    window.location.replace("/")
                 })
             }else{
                 return false

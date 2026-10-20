@@ -1,3 +1,5 @@
+import tokenData from "./tokenModule.js"
+
 export function createEl(tag, text, className){
     const el = document.createElement(tag)
     el.classList.add(className)
@@ -53,4 +55,21 @@ export function getRandomNumber(min, max) {//may be equal to MIN, but always les
 export function getValueFromLocalStorage(key){
     const getArr = localStorage.getItem(key)
     return JSON.parse(getArr)
+}
+
+export function spawnLogoutButton(){
+    document.querySelector("#authLink").remove() 
+    const form = document.querySelector(".form")
+    if(form) form.remove()
+
+    const logoutButton = createEl("button", "Log out", "logoutButton")
+    document.querySelector(".header").append(logoutButton)
+    logoutButton.addEventListener("click", () => {
+        tokenData.clearTokens().then(res => {
+            if(res){
+                logoutButton.remove()
+                window.location.replace("/")
+            }
+        })
+    })
 }

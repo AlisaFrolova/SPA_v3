@@ -5,6 +5,7 @@ import aboutView from "./views/aboutView.js"
 import createAsteroidSection from "./views/spaceView/Modules/asteroidModule.js"
 import signIn from "./views/authView.js"
 import spawnNewsArticle from "./views/newsView/Modules/articleModule.js"
+import { spawnLogoutButton } from "./tools.js"
 
 const routes = {
     "/": homeView,
@@ -19,23 +20,36 @@ const routes = {
 const appContainer = document.getElementById("app")
 
 export const initRouter = () => {
-    const router = async () => {
-        const path = window.location.pathname
-        
-        const viewPage = routes[path] || routes["/"]
-
-        appContainer.innerHTML = ''
-        appContainer.append(viewPage())
-    }
-    document.body.addEventListener("click", e =>{
-        if(e.target.matches("[data-link]")){
-            e.preventDefault(); //so the page won't reload
-            window.history.pushState(null, null, e.target.href); //changes URL of page 
-            router(); //looks at new path and calls func router()
+    appContainer.append(homeView())
+    isAuth().then(() => {
+        const router = async () => {
+            const path = window.location.pathname
+            const viewPage = routes[path] || routes["/"]
+            appContainer.innerHTML = ''
+            appContainer.append(viewPage())
         }
-        });
-
-    document.addEventListener("DOMContentLoaded", router)
+        document.body.addEventListener("click", e =>{
+            if(e.target.matches("[data-link]")){
+                e.preventDefault(); //so the page won't reload
+                window.history.pushState(null, null, e.target.href); //changes URL of page 
+                router(); //looks at new path and calls func router()
+            }
+            });
+        document.addEventListener("DOMContentLoaded", router)
+    })
 }
 
+function isAuth(){
+    return fetch("/api/isAuth", {
+        method: "POST",
+        credentials: "include"
+    }).then(res => { 
+        if (res.status === 200) {
+            delete routes["/auth"]
+            spawnLogoutButton()
+            return true
+        }
+        else return false
+    })
+}
 
