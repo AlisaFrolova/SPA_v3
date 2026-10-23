@@ -5,19 +5,18 @@ import { spawnLogoutButton } from "../tools.js"
 export default function signIn(){
     const appContainer = document.querySelector("#app")
     tokenData.refreshAccessToken().then(res =>{//->
-        console.log(res)//--
         if(res){
-            console.log("found token")//--
-            spawnLogoutButton()
+            spawnLogoutButton() //= logged in
         }else{
-            console.log("not found token")//--
-            appContainer.append(spawnForm())
+            appContainer.append(spawnForm()) // = n-auth
         }
     })
-    return ""
+    return ""//?
 }
 
 function spawnForm(){
+    const formContainer = createEl("section", "", "formContainer")
+
     //form
     const form = createEl("div", "", "form")
 
@@ -73,13 +72,15 @@ function spawnForm(){
         event.preventDefault()
     })
 
-    return form
+    formContainer.append(form)
+
+    return formContainer
 }
 
 function register(userData){
-    fetch('/api/register', {   
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+    fetch("/api/register", {   
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData)
         }).then(response => {
             if(response.status === 200){
@@ -93,15 +94,15 @@ function register(userData){
         })
 }
 function login(userData){
-    fetch('/api/login', {   
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+    fetch("/api/login", {   
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData)
         }).then(response => {
             if(response.status === 200){
                 response.json().then(data => tokenData.setAccessToken(data.accessToken))
                 .then(() => {
-                    spawnLogoutButton()
+                    // spawnLogoutButton()
                     window.location.replace("/")
                 })
             }else{

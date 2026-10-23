@@ -12,19 +12,23 @@ function createNewsArticle(imgURL, title, description){
 
     section.append(createEl("h2", "Article", "header"))
 
-    const returnLink = createEl("a", "Return to News", "link")
-    returnLink.href = "/news"
-    returnLink.setAttribute("data-link", "")
-    section.append(returnLink)
+    const infoContainer = createEl("div", "", "infoArticleContainer")
 
     const img = createEl("img", "", "newsArticleImg")
     img.src = imgURL
-    section.append(img)
+    infoContainer.append(img)
 
     const textBlock = createEl("div", "", "articleNewsText")
     textBlock.append(createEl("h2", title, "text"))
     textBlock.append(createEl("p", description, "text"))
-    section.append(textBlock)
+    infoContainer.append(textBlock)
+
+    section.append(infoContainer)
+
+    const returnLink = createEl("a", "Return to News  -->", "link")
+    returnLink.href = "/news"
+    returnLink.setAttribute("data-link", "")
+    section.append(returnLink)
 
     return section
 }

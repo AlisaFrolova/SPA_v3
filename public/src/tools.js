@@ -58,12 +58,13 @@ export function getValueFromLocalStorage(key){
 }
 
 export function spawnLogoutButton(){
-    document.querySelector("#authLink").remove() 
+    const authLink = document.querySelector("#authLink") //I ->
+    if(authLink) authLink.remove() //I ->
     const form = document.querySelector(".form")
     if(form) form.remove()
 
     const logoutButton = createEl("button", "Log out", "logoutButton")
-    document.querySelector(".header").append(logoutButton)
+    // document.querySelector(".header").append(logoutButton) //!
     logoutButton.addEventListener("click", () => {
         tokenData.clearTokens().then(res => {
             if(res){
@@ -72,4 +73,5 @@ export function spawnLogoutButton(){
             }
         })
     })
+    return logoutButton
 }

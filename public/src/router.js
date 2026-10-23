@@ -6,6 +6,8 @@ import createAsteroidSection from "./views/spaceView/Modules/asteroidModule.js"
 import signIn from "./views/authView.js"
 import spawnNewsArticle from "./views/newsView/Modules/articleModule.js"
 import { spawnLogoutButton } from "./tools.js"
+import spawnHeader from "./spawnHeader.js"
+import spawnFooter from "./spawnFooter.js"
 
 const routes = {
     "/": homeView,
@@ -21,12 +23,25 @@ const appContainer = document.getElementById("app")
 
 export const initRouter = () => {
     appContainer.append(homeView())
-    isAuth().then(() => {
+    isAuth().then( res => {
+        if(!res) {
+            appContainer.innerHTML = ""
+            appContainer.prepend(signIn())
+            //appContainer.append(spawnFooter())//!
+            return
+        }
+        appContainer.prepend(spawnHeader())//!
+        document.querySelector(".header").append(spawnLogoutButton())
+
         const router = async () => {
             const path = window.location.pathname
             const viewPage = routes[path] || routes["/"]
-            appContainer.innerHTML = ''
+            appContainer.innerHTML = ""
+
+            appContainer.prepend(spawnHeader())//!
+            document.querySelector(".header").append(spawnLogoutButton())
             appContainer.append(viewPage())
+            appContainer.append(spawnFooter())
         }
         document.body.addEventListener("click", e =>{
             if(e.target.matches("[data-link]")){
@@ -36,17 +51,18 @@ export const initRouter = () => {
             }
             });
         document.addEventListener("DOMContentLoaded", router)
+        appContainer.append(spawnFooter())
     })
 }
 
-function isAuth(){
+function isAuth(){//-> (?)
     return fetch("/api/isAuth", {
         method: "POST",
         credentials: "include"
     }).then(res => { 
         if (res.status === 200) {
             delete routes["/auth"]
-            spawnLogoutButton()
+            // spawnLogoutButton()
             return true
         }
         else return false
