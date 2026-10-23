@@ -27,32 +27,36 @@ export const initRouter = () => {
         if(!res) {
             appContainer.innerHTML = ""
             appContainer.prepend(signIn())
-            //appContainer.append(spawnFooter())//!
+            appContainer.append(spawnFooter())
             return
         }
-        appContainer.prepend(spawnHeader())//!
-        document.querySelector(".header").append(spawnLogoutButton())
+
+        spawnHeaderAndLogoutButton()
+        appContainer.append(spawnFooter())
 
         const router = async () => {
             const path = window.location.pathname
             const viewPage = routes[path] || routes["/"]
             appContainer.innerHTML = ""
 
-            appContainer.prepend(spawnHeader())//!
-            document.querySelector(".header").append(spawnLogoutButton())
+            spawnHeaderAndLogoutButton()
             appContainer.append(viewPage())
             appContainer.append(spawnFooter())
         }
         document.body.addEventListener("click", e =>{
-            if(e.target.matches("[data-link]")){
-                e.preventDefault(); //so the page won't reload
-                window.history.pushState(null, null, e.target.href); //changes URL of page 
-                router(); //looks at new path and calls func router()
-            }
-            });
+                if(e.target.matches("[data-link]")){
+                    e.preventDefault()
+                    window.history.pushState(null, null, e.target.href)
+                    router()
+                }
+            })
         document.addEventListener("DOMContentLoaded", router)
-        appContainer.append(spawnFooter())
     })
+}
+
+function spawnHeaderAndLogoutButton(){
+    appContainer.prepend(spawnHeader())
+    document.querySelector(".header").append(spawnLogoutButton())
 }
 
 function isAuth(){//-> (?)
@@ -62,7 +66,6 @@ function isAuth(){//-> (?)
     }).then(res => { 
         if (res.status === 200) {
             delete routes["/auth"]
-            // spawnLogoutButton()
             return true
         }
         else return false

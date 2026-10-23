@@ -8,7 +8,7 @@ export default function signIn(){
         if(res){
             spawnLogoutButton() //= logged in
         }else{
-            appContainer.append(spawnForm()) // = n-auth
+            appContainer.prepend(spawnForm()) // = n-auth
         }
     })
     return ""//?
@@ -71,6 +71,9 @@ function spawnForm(){
         } 
         event.preventDefault()
     })
+
+    formContainer.prepend(createEl("div", "", "logo"))
+    formContainer.append(createEl("div", "", "companyName"))
 
     formContainer.append(form)
 

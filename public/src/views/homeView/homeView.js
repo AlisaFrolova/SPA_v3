@@ -1,6 +1,7 @@
 import { createEl } from "../../tools.js"
 import tokenData from "../../tokenModule.js"
 import createAchievementsSection from "./Modules/achievementsModule.js"
+import { getVideos } from "../../NasaApi.js"
 
 export default function homeView(){
     const app = document.querySelector('#app')
@@ -31,6 +32,10 @@ export default function homeView(){
 
     // tokenData.refreshAccessToken().then(res => {
     //     if(res) console.log(tokenData.getAccessToken())
+    // })
+
+    // getVideos(5).then(res => {
+    //     console.log(res)//array!
     // })
     
     section.append(createAchievementsSection())

@@ -26,3 +26,18 @@ export async function getAsteroids(startDate, endDate){ //date format is the sam
         console.log(error)
     }
 }
+
+export async function getVideos(numberOfVideos){ //works ~~
+    try{
+        const response = await fetch(`https://images-api.nasa.gov/search?q=space&media_type=video&page_size=${numberOfVideos}`)
+        if(!response.ok){
+            throw new Error(`Error: ${response.status}`)
+        }
+        const data = await response.json()
+        const videos = data.collection.items
+        return videos.slice(0, numberOfVideos)
+    } catch(error){
+        console.log(error)
+        return []
+    }
+}
