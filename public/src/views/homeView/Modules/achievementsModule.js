@@ -3,7 +3,18 @@ import { createEl } from "../../../tools.js"
 export default function createAchievementsSection(){
     //achievements block
         const achievSection = createEl("section", "", "achievements")
-        achievSection.style.backgroundImage = `url(https://images-assets.nasa.gov/image/iss066e152101/iss066e152101~orig.jpg)`
+
+        // const backgroundVideo = createEl("video", "", "backgroundVideo")
+        // backgroundVideo.setAttribute("autoplay", "")
+        // backgroundVideo.setAttribute("loop", "")
+        // backgroundVideo.muted = "muted"
+        
+        // const videoSource = createEl("source", "", "source")
+        // videoSource.type = "video/mp4"
+        // videoSource.src = "https://images-assets.nasa.gov/video/A Future in Orbit/A Future in Orbit~orig.mp4"
+        // backgroundVideo.append(videoSource)
+        
+        //achievSection.append(backgroundVideo)
     
         const infoContainer = createEl("div", "", "infoContainer")
         achievSection.append(infoContainer)
